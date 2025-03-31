@@ -63,3 +63,11 @@ body {
 #equals:hover {
     background-color: #66bb6a;
 }
+
+#backspace {
+    background-color: #f0ad4e;
+}
+
+#backspace:hover {
+    background-color: #f0ad4e;
+}

@@ -1,5 +1,3 @@
-// script.js
-
 // Basic math operator functions
 function add(a, b) {
     return a + b;
