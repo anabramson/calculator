@@ -1,3 +1,6 @@
+// script.js
+
+// Basic math operator functions
 function add(a, b) {
     return a + b;
 }
@@ -33,7 +36,14 @@ function updateDisplay(value) {
 // Function to handle digit button clicks
 document.querySelectorAll('.digit').forEach(button => {
     button.addEventListener('click', () => {
-        currentInput += button.textContent;
+        const value = button.textContent;
+        if (value === '.') {
+            if (!currentInput.includes('.')) {
+                currentInput += '.';
+            }
+        } else {
+            currentInput += value;
+        }
         updateDisplay(currentInput);
     });
 });
@@ -90,4 +100,48 @@ document.getElementById('clear').addEventListener('click', () => {
     currentOperator = null;
     currentInput = '';
     updateDisplay('0');
+});
+
+// Function to handle backspace button click
+document.getElementById('backspace').addEventListener('click', () => {
+    currentInput = currentInput.slice(0, -1);
+    updateDisplay(currentInput || '0');
+});
+
+// Function to handle keyboard input
+document.addEventListener('keydown', (event) => {
+    const key = event.key;
+    if (!isNaN(key)) {
+        currentInput += key;
+        updateDisplay(currentInput);
+    } else if (['+', '-', '*', '/'].includes(key)) {
+        if (firstOperand === null) {
+            firstOperand = parseFloat(currentInput);
+            currentOperator = key;
+            currentInput = '';
+        } else if (currentInput) {
+            secondOperand = parseFloat(currentInput);
+            firstOperand = operate(currentOperator, firstOperand, secondOperand);
+            currentOperator = key;
+            updateDisplay(firstOperand);
+            currentInput = '';
+        }
+    } else if (key === 'Enter' || key === '=') {
+        if (firstOperand !== null && currentInput) {
+            secondOperand = parseFloat(currentInput);
+            const result = operate(currentOperator, firstOperand, secondOperand);
+            updateDisplay(result);
+            firstOperand = result;
+            currentInput = '';
+            currentOperator = null;
+        }
+    } else if (key === 'Backspace') {
+        currentInput = currentInput.slice(0, -1);
+        updateDisplay(currentInput || '0');
+    } else if (key === '.') {
+        if (!currentInput.includes('.')) {
+            currentInput += '.';
+            updateDisplay(currentInput);
+        }
+    }
 });
